@@ -139,11 +139,13 @@ public class AVEXDB {
          	}
         
         if (market != null && market.size() > 0){
+        	System.out.println("Received Market; Market Size-" + market.size()); 
             mongoClient.close();
         	return market;
         }
         else{
             mongoClient.close();
+        	System.out.println("Nothing within the Market"); 
         	return null;
         }
 		}
@@ -180,6 +182,7 @@ public class AVEXDB {
 		}
 		catch(Exception ex)
 		{
+			 System.out.println("Exception: " + ex.toString()); 
 		}
 	}
 	

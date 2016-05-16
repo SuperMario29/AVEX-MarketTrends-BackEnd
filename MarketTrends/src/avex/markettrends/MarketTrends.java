@@ -14,6 +14,8 @@ public class MarketTrends {
 	
 	public void ImportData(){
 		
+		try
+		{
 		BasicDBObject marketTrend = new BasicDBObject();
 		Date date = new Date();
 		
@@ -27,6 +29,10 @@ public class MarketTrends {
 		marketTrend.append("recordstatusdate", date);
 		
 	     avexDB.InsertMarketTrends(marketTrend);
+		}
+		catch(Exception ex){
+            System.out.println("Exception: " + ex.toString()); 
+		}
 	}
 	
 	private List<BasicDBObject> GetBiggestLosers(){
@@ -42,12 +48,14 @@ public class MarketTrends {
 	}
 	
 	private List<Market> GetMarketPlace(){
+		try{
 		List<Market>marketplace = new ArrayList<>();
 		Market value = new Market();
 		List<BasicDBObject> athletes = new ArrayList<>();
 		athletes = avexDB.GetMarketPlace();
 		List<BasicDBObject> market = avexDB.GetMarketTrendsToday();
 		
+		//Create Current Market Value
 		for(BasicDBObject athlete:athletes)
 		{
 			double price = (double)(athlete.get("currentprice"));
@@ -58,7 +66,9 @@ public class MarketTrends {
 		value.setRecordstatusdate(new Date());
 		value.setRecordstatus(1);
 		marketplace.add(value);
+    	System.out.println("Created Current Market Value-" + value.getMarketprice()); 
 		
+		if (market != null && market.size() > 0){
 		for(BasicDBObject m:market)
 		{
 			Market x = new Market();
@@ -67,8 +77,18 @@ public class MarketTrends {
 			x.setRecordstatus((m.getInt("recordstatus")));
 			marketplace.add(x);
 		}
+    	System.out.println("Got Previous Market Values" + market.size()); 
+		}
+		else{
+		  	System.out.println("No Previous Market Values" + market.size()); 
+		}
 		
 		return marketplace;
+		}
+		catch(Exception ex){
+            System.out.println("Exception: " + ex.toString()); 
+            return null;
+		}
 	}
 	
 }
