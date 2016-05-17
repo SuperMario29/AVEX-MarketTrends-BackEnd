@@ -31,7 +31,7 @@ public class MarketTrends {
 	     avexDB.InsertMarketTrends(marketTrend);
 		}
 		catch(Exception ex){
-            System.out.println("Exception: " + ex.toString()); 
+            System.out.println("Exception: " + ex.getLocalizedMessage() + "; Stack Trace: " + ex.getStackTrace()); 
 		}
 	}
 	
@@ -86,9 +86,8 @@ public class MarketTrends {
 		return marketplace;
 		}
 		catch(Exception ex){
-            System.out.println("Exception: " + ex.toString()); 
+            System.out.println("Exception: " + ex.getLocalizedMessage() + "; Stack Trace: " + ex.getStackTrace()); 
             return null;
 		}
 	}
-	
 }

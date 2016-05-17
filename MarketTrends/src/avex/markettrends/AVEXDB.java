@@ -61,7 +61,7 @@ public class AVEXDB {
 		}
 		catch(Exception ex)
 		{
-            System.out.println("Exception: " + ex.toString()); 
+            System.out.println("Exception: " + ex.getLocalizedMessage() + "; Stack Trace: " + ex.getStackTrace()); 
 			return null;
 		}
 	}
@@ -102,7 +102,7 @@ public class AVEXDB {
 		}
 		catch(Exception ex)
 		{
-            System.out.println("Exception: " + ex.toString()); 
+            System.out.println("Exception: " + ex.getLocalizedMessage() + "; Stack Trace: " + ex.getStackTrace()); 
 			return null;
 		}
 	}
@@ -129,14 +129,15 @@ public class AVEXDB {
         System.out.println("Collection athletes selected successfully");
         
         Date date = new Date();       
-        
         DBCursor cursor = marketCollection.find(new BasicDBObject("recordstatusdate", new BasicDBObject("$gte",date))).sort(new BasicDBObject("recordstatusdate", -1)).limit(1);
 	
+        if(cursor != null && cursor.size() > 0){
         while (cursor.hasNext()) { 
             BasicDBObject x = (BasicDBObject) cursor.next();
             market.add(x); 
             i++;
          	}
+        }
         
         if (market != null && market.size() > 0){
         	System.out.println("Received Market; Market Size-" + market.size()); 
@@ -151,7 +152,7 @@ public class AVEXDB {
 		}
 		catch(Exception ex)
 		{
-            System.out.println("Exception: " + ex.toString()); 
+            System.out.println("Exception: " + ex.getLocalizedMessage() + "; Stack Trace: " + ex.getStackTrace()); 
 			return null;
 		}
 	}
@@ -182,9 +183,7 @@ public class AVEXDB {
 		}
 		catch(Exception ex)
 		{
-			 System.out.println("Exception: " + ex.toString()); 
+            System.out.println("Exception: " + ex.getLocalizedMessage() + "; Stack Trace: " + ex.getStackTrace()); 
 		}
 	}
-	
-	
 }

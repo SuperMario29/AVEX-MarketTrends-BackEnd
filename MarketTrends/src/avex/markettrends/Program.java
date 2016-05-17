@@ -34,7 +34,7 @@ public class Program {
 			marketTrends.ImportData();
 		}
 		catch(Exception ex){
-			System.out.println("Exception: " + ex.toString());
+            System.out.println("Exception: " + ex.getLocalizedMessage() + "; Stack Trace: " + ex.getStackTrace()); 
 		}
 	}
 }
