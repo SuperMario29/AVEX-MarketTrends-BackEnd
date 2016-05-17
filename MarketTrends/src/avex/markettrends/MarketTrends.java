@@ -21,7 +21,7 @@ public class MarketTrends {
 		
 		List<BasicDBObject> topLosers = GetBiggestLosers(); 
 		List<BasicDBObject> topGainers = GetBiggestGainers();
-		List<Market> marketplace = GetMarketPlace();
+		List<BasicDBObject> marketplace = GetMarketPlace();
 		
 		marketTrend.append("topgainerstoday", topGainers);
 		marketTrend.append("toploserstoday", topLosers);
@@ -47,10 +47,11 @@ public class MarketTrends {
 		return value;
 	}
 	
-	private List<Market> GetMarketPlace(){
+	private List<BasicDBObject> GetMarketPlace(){
 		try{
-		List<Market>marketplace = new ArrayList<>();
-		Market value = new Market();
+		List<BasicDBObject>marketplace = new ArrayList<>();
+		BasicDBObject value = new BasicDBObject();
+		Market x = new Market();
 		List<BasicDBObject> athletes = new ArrayList<>();
 		athletes = avexDB.GetMarketPlace();
 		List<BasicDBObject> market = avexDB.GetMarketTrendsToday();
@@ -59,24 +60,20 @@ public class MarketTrends {
 		for(BasicDBObject athlete:athletes)
 		{
 			double price = (double)(athlete.get("currentprice"));
-			price += value.getMarketprice();
-			value.setMarketprice(price);
+			price += x.getMarketprice();
+			x.setMarketprice(price);
 		}
-		value.setMarketprice(value.getMarketprice() / athletes.size());
-		value.setRecordstatusdate(new Date());
-		value.setRecordstatus(1);
+		value.append("marketprice", x.getMarketprice() / athletes.size());
+		value.append("recordstatusdate", new Date());
+		value.append("recordstatus",1);
 		marketplace.add(value);
-    	System.out.println("Created Current Market Value-" + value.getMarketprice()); 
+    	System.out.println("Created Current Market Value-" + value.get("marketplace")); 
 		
 		if (market != null && market.size() > 0){
 	    	System.out.println("Market Has Value Previous Market Values"); 
 		for(BasicDBObject m:market)
 		{
-			Market x = new Market();
-			x.setMarketprice((double)(m.get("marketprice")));
-			x.setRecordstatusdate(m.getDate("recordstatusdate"));
-			x.setRecordstatus((m.getInt("recordstatus")));
-			marketplace.add(x);
+			marketplace.add(m);
 		}
     	System.out.println("Got Previous Market Values" + market.size()); 
 		}
