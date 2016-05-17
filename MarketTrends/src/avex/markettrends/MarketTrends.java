@@ -69,6 +69,7 @@ public class MarketTrends {
     	System.out.println("Created Current Market Value-" + value.getMarketprice()); 
 		
 		if (market != null && market.size() > 0){
+	    	System.out.println("Market Has Value Previous Market Values"); 
 		for(BasicDBObject m:market)
 		{
 			Market x = new Market();
@@ -80,7 +81,7 @@ public class MarketTrends {
     	System.out.println("Got Previous Market Values" + market.size()); 
 		}
 		else{
-		  	System.out.println("No Previous Market Values" + market.size()); 
+		  	System.out.println("No Previous Market Values"); 
 		}
 		
 		return marketplace;

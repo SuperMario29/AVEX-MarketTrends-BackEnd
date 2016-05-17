@@ -126,7 +126,7 @@ public class AVEXDB {
         //System.out.println("Authentication: "+auth);         
 			
         DBCollection marketCollection = db.getCollection("markettrends");
-        System.out.println("Collection athletes selected successfully");
+        System.out.println("Collection MarketTrends selected successfully");
         
         Date date = new Date();       
         DBCursor cursor = marketCollection.find(new BasicDBObject("recordstatusdate", new BasicDBObject("$gte",date))).sort(new BasicDBObject("recordstatusdate", -1)).limit(1);
