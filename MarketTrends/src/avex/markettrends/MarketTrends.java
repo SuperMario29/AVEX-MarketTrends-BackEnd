@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 
 import avex.models.Market;
@@ -54,7 +55,7 @@ public class MarketTrends {
 		Market x = new Market();
 		List<BasicDBObject> athletes = new ArrayList<>();
 		athletes = avexDB.GetMarketPlace();
-		List<BasicDBObject> market = avexDB.GetMarketTrendsToday();
+		BasicDBList market = avexDB.GetMarketTrendsToday();
 		
 		//Create Current Market Value
 		for(BasicDBObject athlete:athletes)
@@ -67,15 +68,16 @@ public class MarketTrends {
 		value.append("recordstatusdate", new Date());
 		value.append("recordstatus",1);
 		marketplace.add(value);
-    	System.out.println("Created Current Market Value-" + value.get("marketplace")); 
+    	System.out.println("Created Current Market Value-" + value.get("marketprice")); 
 		
 		if (market != null && market.size() > 0){
 	    	System.out.println("Market Has Value Previous Market Values"); 
-		for(BasicDBObject m:market)
+		for(Object m:market)
 		{
-			marketplace.add(m);
+			BasicDBObject o = (BasicDBObject) m;
+			marketplace.add(o);
 		}
-    	System.out.println("Got Previous Market Values" + market.size()); 
+    	System.out.println("Got Previous Market Values: " + market.size()); 
 		}
 		else{
 		  	System.out.println("No Previous Market Values"); 

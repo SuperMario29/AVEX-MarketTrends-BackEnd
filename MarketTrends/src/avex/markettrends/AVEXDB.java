@@ -1,8 +1,11 @@
 package avex.markettrends;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -108,13 +111,13 @@ public class AVEXDB {
 	}
 	
 	@SuppressWarnings("deprecation")
-	public List<BasicDBObject> GetMarketTrendsToday()
+	public BasicDBList GetMarketTrendsToday()
 	{
         @SuppressWarnings("unused")
 		int i = 1;
 		try
 		{			
-        List<BasicDBObject> market = new ArrayList<>();
+        BasicDBList market = new BasicDBList();
         
         MongoClient mongoClient = new MongoClient(Program.DATABASE_CONNECTION , Program.DATABASE_PORT );
     	
@@ -128,14 +131,25 @@ public class AVEXDB {
         DBCollection marketCollection = db.getCollection("markettrends");
         System.out.println("Collection MarketTrends selected successfully");
         
-        Date date = new Date();       
-        DBCursor cursor = marketCollection.find(new BasicDBObject("recordstatusdate", new BasicDBObject("$gte",date))).sort(new BasicDBObject("recordstatusdate", -1)).limit(1);
-	
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY,0);
+        cal.set(Calendar.MINUTE,0);
+        cal.set(Calendar.SECOND,0);
+        cal.set(Calendar.MILLISECOND,0);
+        Date date = cal.getTime();
+        //DBCursor cursor = marketCollection.find(new BasicDBObject("recordstatusdate", new BasicDBObject("$gte",date))).sort(new BasicDBObject("recordstatusdate", -1)).limit(1);
+        
+        DBCursor cursor = marketCollection.find().sort(new BasicDBObject("recordstatusdate", -1)).limit(1);
+        
         if(cursor != null && cursor.size() > 0){
         while (cursor.hasNext()) { 
             BasicDBObject x = (BasicDBObject) cursor.next();
-            market.add(x); 
-            i++;
+            Date objectDate = x.getDate("recordstatusdate");
+            int result = objectDate.compareTo(date);
+            if(result == 0 || result == 1){
+                market = (BasicDBList) x.get("totalmarkettoday"); 
+                i++;
+            }
          	}
         }
         
@@ -166,7 +180,7 @@ public class AVEXDB {
 	        MongoClient mongoClient = new MongoClient(Program.DATABASE_CONNECTION , Program.DATABASE_PORT );
 	    	
 	        // Now connect to your databases
-			DB db = mongoClient.getDB(Program.DATABASE_NAME);
+		DB db = mongoClient.getDB(Program.DATABASE_NAME);
         System.out.println("Connect to database successfully");
 			
         //boolean auth = db.authenticate(myUserName, myPassword);
