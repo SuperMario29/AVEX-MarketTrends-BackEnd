@@ -2,7 +2,6 @@ package avex.markettrends;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import com.mongodb.BasicDBList;
