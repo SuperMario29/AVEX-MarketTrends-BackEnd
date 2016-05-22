@@ -18,7 +18,7 @@ public class MarketTrends {
 		try
 		{
 		BasicDBObject marketTrend = new BasicDBObject();
-		long date = new Date().getTime();
+		Date date = new Date();
 		
 		List<BasicDBObject> topLosers = GetBiggestLosers(); 
 		List<BasicDBObject> topGainers = GetBiggestGainers();
@@ -65,7 +65,7 @@ public class MarketTrends {
 			x.setMarketprice(price);
 		}
 		value.append("marketprice", x.getMarketprice() / athletes.size());
-		value.append("recordstatusdate", new Date().getTime());
+		value.append("recordstatusdate", new Date());
 		value.append("recordstatus",1);
 		marketplace.add(value);
     	System.out.println("Created Current Market Value-" + value.get("marketprice")); 
